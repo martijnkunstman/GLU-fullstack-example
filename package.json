@@ -4,6 +4,9 @@
   "description": "An educational example of a complex tech stack to start a new project.",
   "main": "index.js",
   "scripts": {
+    "start": "node ./server.js"
+  },
+  "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/martijnkunstman/GLU-fullstack-example/issues"
   },
-  "homepage": "https://github.com/martijnkunstman/GLU-fullstack-example#readme"
+  "homepage": "https://github.com/martijnkunstman/GLU-fullstack-example#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
