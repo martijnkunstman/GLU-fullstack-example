@@ -4,9 +4,7 @@
   "description": "An educational example of a complex tech stack to start a new project.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server.js"
-  },
-  "scripts": {
+    "start": "node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +20,13 @@
   "homepage": "https://github.com/martijnkunstman/GLU-fullstack-example#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-node-externals": "^1.7.2"
   }
 }
