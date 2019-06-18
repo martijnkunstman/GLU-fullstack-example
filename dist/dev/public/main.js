@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "710b36f5ed985daac77b";
+/******/ 	var hotCurrentHash = "f8ad346b3f31b4f320d3";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -996,7 +996,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 var getUrl = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/getUrl.js */ "./node_modules/css-loader/dist/runtime/getUrl.js");
 var ___CSS_LOADER_URL___0___ = getUrl(__webpack_require__(/*! ../img/bg.jpg */ "./src/img/bg.jpg"));
 // Module
-exports.push([module.i, "h1, h2, h3, h4, h5, p {\r\n    font-family: helvetica;\r\n    color: #3e3e3e;\r\n  }\r\n  .description {\r\n    font-size: 14px;\r\n    color: #9e9e9e;\r\n  }\r\n  .awful-selfie{\r\n    background: url(" + ___CSS_LOADER_URL___0___ + ");\r\n    width: 300px;\r\n    height: 300px;\r\n    background-size: 100% auto;\r\n    background-repeat: no-repeat;\r\n  }", ""]);
+exports.push([module.i, "h1,\r\nh2,\r\nh3,\r\nh4,\r\nh5,\r\np {\r\n  font-family: helvetica;\r\n  color: #3e3e3e;\r\n}\r\n\r\n.description {\r\n  font-size: 14px;\r\n  color: #9e9e9e;\r\n}\r\n\r\n.awful-selfie {\r\n  background: url(" + ___CSS_LOADER_URL___0___ + ");\r\n  width: 300px;\r\n  height: 300px;\r\n  background-size: 100% auto;\r\n  background-repeat: no-repeat;\r\n}\r\n\r\nbody {\r\n  background: blue\r\n}", ""]);
 
 
 /***/ }),

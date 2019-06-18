@@ -5,12 +5,15 @@ module.exports = (env, argv) => {
   const SERVER_PATH = (argv.mode === 'production') ?
     './src/server/server-prod.js' :
     './src/server/server-dev.js'
+  const OUTPUT = (argv.mode === 'production') ?
+    'dist/prod' :
+    'dist/dev'
   return ({
     entry: {
       server: SERVER_PATH,
     },
     output: {
-      path: path.join(__dirname, 'dist'),
+      path: path.join(__dirname, OUTPUT),
       publicPath: '/',
       filename: '[name].js'
     },
