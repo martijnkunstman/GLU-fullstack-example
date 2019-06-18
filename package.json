@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "buildmac": "rm -rf dist && webpack --mode development",
-    "buildwindows": "del dist && webpack --mode development",
+    "build": "del dist && webpack --mode development --config webpack.server.config.js && webpack --mode development",
     "start": "node ./dist/server.js"
   },
   "repository": {
@@ -15,7 +14,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/martijnkunstman/GLU-fullstack-example/issues"
   },
@@ -27,8 +26,11 @@
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "babel-loader": "^8.0.6",
+    "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4",
     "webpack-node-externals": "^1.7.2"
