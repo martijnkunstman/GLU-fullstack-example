@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "f8ad346b3f31b4f320d3";
+/******/ 	var hotCurrentHash = "49cda06202e7c2fed618";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3133,6 +3133,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_logger__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./js/logger */ "./src/js/logger.js");
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./css/style.css */ "./src/css/style.css");
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_style_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ts_game_ts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ts/game.ts */ "./src/ts/game.ts");
+/* harmony import */ var _ts_game_ts__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_ts_game_ts__WEBPACK_IMPORTED_MODULE_2__);
+
 
  // Log message to console
 
@@ -3158,6 +3161,582 @@ var logMessage = function logMessage(msg) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (logMessage);
+
+/***/ }),
+
+/***/ "./src/ts/game.ts":
+/*!************************!*\
+  !*** ./src/ts/game.ts ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+//---------------------------------------------
+// classes
+//---------------------------------------------
+var Point =
+/*#__PURE__*/
+function () {
+  function Point() {
+    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+    _classCallCheck(this, Point);
+
+    this.x = x;
+    this.y = y;
+  }
+
+  _createClass(Point, [{
+    key: "distance",
+    value: function distance(point) {
+      return Math.sqrt(Math.pow(this.y - point.y, 2) + Math.pow(this.x - point.x, 2));
+    }
+  }, {
+    key: "angle",
+    value: function angle(point) {
+      return Math.atan2(this.y - point.y, this.x - point.x) * 180 / Math.PI;
+    }
+  }]);
+
+  return Point;
+}();
+
+var GameElement =
+/*#__PURE__*/
+function () {
+  function GameElement(spriteSrc) {
+    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Point();
+    var rotation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    var speed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+
+    _classCallCheck(this, GameElement);
+
+    this.sprite = new Image();
+    this.spriteLoaded = false;
+    this.point = new Point();
+    this.width = 0;
+    this.height = 0;
+    this.sprite.addEventListener("load", this.load.bind(this));
+    this.sprite.src = spriteSrc;
+    this.point.x = point.x;
+    this.point.y = point.y;
+    this.rotation = rotation;
+    this.speed = speed;
+  }
+
+  _createClass(GameElement, [{
+    key: "load",
+    value: function load(e) {
+      this.width = e.currentTarget.width;
+      this.height = e.currentTarget.height;
+      this.spriteLoaded = true;
+      e.currentTarget.removeEventListener("load", this.load);
+    }
+  }, {
+    key: "draw",
+    value: function draw(ctx) {
+      if (this.spriteLoaded) {
+        ctx.save(); //ctx.globalCompositeOperation = 'xor'; 
+
+        ctx.translate(this.point.x, this.point.y);
+        ctx.rotate(this.rotation * Math.PI / 180);
+        ctx.drawImage(this.sprite, -this.width / 2, -this.height / 2);
+        ctx.restore();
+      }
+    }
+  }]);
+
+  return GameElement;
+}(); //---------------------------------------------
+
+
+var Player =
+/*#__PURE__*/
+function (_GameElement) {
+  _inherits(Player, _GameElement);
+
+  function Player(spriteSrc) {
+    var _this;
+
+    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Point();
+    var rotation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    var speed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    var speedMax = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+    var speedDamping = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+    var steer = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
+    var steerMax = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 0;
+    var steerDamping = arguments.length > 8 && arguments[8] !== undefined ? arguments[8] : 0;
+
+    _classCallCheck(this, Player);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, spriteSrc, point, rotation, speed));
+    _this.speedMax = 0;
+    _this.speedDamping = 0;
+    _this.steer = 0;
+    _this.steerMax = 0;
+    _this.steerDamping = 0;
+    _this.horizontal = 0;
+    _this.vertical = 0;
+    _this.difference = 0.5;
+    _this.speedMax = speedMax;
+    _this.speedDamping = speedDamping;
+    _this.steer = steer;
+    _this.steerMax = steerMax;
+    _this.steerDamping = steerDamping;
+    return _this;
+  }
+
+  _createClass(Player, [{
+    key: "update",
+    value: function update(up, down, left, right, width, height) {
+      // version 1
+
+      /*
+      if (up) { this.speed -= 0.3; }
+      if (down) { this.speed += 0.3; }
+      if (left) { this.steer += 0.3; }
+      if (right) { this.steer -= 0.3; }
+        if (this.steer > 0) {
+          this.steer = this.steer - this.steerDamping;
+          if (this.steer < 0) { this.steer = 0 };
+      }
+      else {
+          this.steer = this.steer + this.steerDamping
+          if (this.steer > 0) { this.steer = 0 };
+      }
+        if (this.speed > 0) {
+          this.speed = this.speed - this.speedDamping;
+          if (this.speed < 0) { this.speed = 0 };
+      }
+      else {
+          this.speed = this.speed + this.speedDamping;
+          if (this.speed > 0) { this.speed = 0 };
+      }
+        if (this.speed > this.speedMax) { this.speed = this.speedMax }
+      if (this.speed < -this.speedMax) { this.speed = -this.speedMax }
+      if (this.steer > this.steerMax) { this.steer = this.steerMax }
+      if (this.steer < -this.steerMax) { this.steer = -this.steerMax }
+        this.rotation = this.rotation - this.steer;
+        this.point.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
+        this.point.x += this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y += this.speed * Math.sin(this.rotation * Math.PI / 180);
+      */
+      //version 2
+      if (up) {
+        this.vertical += this.difference;
+      }
+
+      if (down) {
+        this.vertical -= this.difference;
+      }
+
+      if (left) {
+        this.horizontal -= this.difference;
+      }
+
+      if (right) {
+        this.horizontal += this.difference;
+      }
+
+      if (this.horizontal > this.speedMax) {
+        this.horizontal = this.speedMax;
+      }
+
+      if (this.horizontal < -this.speedMax) {
+        this.horizontal = -this.speedMax;
+      }
+
+      if (this.vertical > this.speedMax) {
+        this.vertical = this.speedMax;
+      }
+
+      if (this.vertical < -this.speedMax) {
+        this.vertical = -this.speedMax;
+      }
+
+      if (this.horizontal != 0) {
+        if (this.horizontal > 0) {
+          this.horizontal = this.horizontal - this.steerDamping;
+
+          if (this.horizontal < 0) {
+            this.horizontal = 0;
+          }
+
+          ;
+        } else {
+          this.horizontal = this.horizontal + this.steerDamping;
+
+          if (this.horizontal > 0) {
+            this.horizontal = 0;
+          }
+
+          ;
+        }
+      }
+
+      if (this.vertical != 0) {
+        if (this.vertical > 0) {
+          this.vertical = this.vertical - this.steerDamping;
+
+          if (this.vertical < 0) {
+            this.vertical = 0;
+          }
+
+          ;
+        } else {
+          this.vertical = this.vertical + this.steerDamping;
+
+          if (this.vertical > 0) {
+            this.vertical = 0;
+          }
+
+          ;
+        }
+      }
+
+      this.point.x += this.horizontal;
+      this.point.y -= this.vertical;
+
+      if (this.vertical > this.difference || this.vertical < -this.difference || this.horizontal > this.difference || this.horizontal < -this.difference) {
+        //this.rotation = Math.atan2(this.point.y - (this.point.y - this.vertical), -this.point.x + (this.point.x - this.horizontal)) * 180 / Math.PI;
+        var newrotation = Math.atan2(this.point.y - (this.point.y - this.vertical), -this.point.x + (this.point.x - this.horizontal)) * 180 / Math.PI;
+        var difference = this.rotation - newrotation;
+
+        if (difference > 180) {
+          difference = -360 + difference;
+        }
+
+        if (difference < -180) {
+          difference = 360 + difference;
+        }
+
+        this.rotation = this.rotation - difference / 8;
+      } // version 3
+
+      /*
+      if (up) { this.point.y -= 2; }
+      if (down) { this.point.y += 2; }
+      if (left) { this.point.x -= 2; }
+      if (right) { this.point.x += 2; }
+      */
+
+
+      if (this.point.x > width) {
+        this.point.x = 0;
+      }
+
+      ;
+
+      if (this.point.y > height) {
+        this.point.y = 0;
+      }
+
+      ;
+
+      if (this.point.x < 0) {
+        this.point.x = width;
+      }
+
+      ;
+
+      if (this.point.y < 0) {
+        this.point.y = height;
+      }
+
+      ;
+    }
+  }]);
+
+  return Player;
+}(GameElement); //---------------------------------------------
+
+
+var Enemy =
+/*#__PURE__*/
+function (_GameElement2) {
+  _inherits(Enemy, _GameElement2);
+
+  function Enemy() {
+    var _getPrototypeOf2;
+
+    var _temp, _this2;
+
+    _classCallCheck(this, Enemy);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this2, (_temp = _this2 = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Enemy)).call.apply(_getPrototypeOf2, [this].concat(args))), _this2.timer = 0, _this2.fireRate = 100, _temp));
+  }
+
+  _createClass(Enemy, [{
+    key: "update",
+    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
+      //rotation
+      var newrotation = Math.atan2(this.point.y - yPlayer, this.point.x - xPlayer) * 180 / Math.PI;
+      var difference = this.rotation - newrotation;
+
+      if (difference > 180) {
+        difference = -360 + difference;
+      }
+
+      if (difference < -180) {
+        difference = 360 + difference;
+      }
+
+      this.rotation = this.rotation - difference / 128; //position
+
+      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
+
+      if (this.point.x > width) {
+        this.point.x = 0;
+      }
+
+      ;
+
+      if (this.point.y > height) {
+        this.point.y = 0;
+      }
+
+      ;
+
+      if (this.point.x < 0) {
+        this.point.x = width;
+      }
+
+      ;
+
+      if (this.point.y < 0) {
+        this.point.y = height;
+      }
+
+      ; //bullet
+
+      this.timer++;
+
+      if (this.timer > this.fireRate) {
+        this.timer = 0;
+        gameElements.push(new Bullet("./assets/img/bullet.png", new Point(this.point.x, this.point.y), this.rotation, 8));
+      }
+    }
+  }]);
+
+  return Enemy;
+}(GameElement); //---------------------------------------------
+
+
+var Bullet =
+/*#__PURE__*/
+function (_GameElement3) {
+  _inherits(Bullet, _GameElement3);
+
+  function Bullet() {
+    _classCallCheck(this, Bullet);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Bullet).apply(this, arguments));
+  }
+
+  _createClass(Bullet, [{
+    key: "update",
+    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
+      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
+
+      if (this.point.x < 0) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.y < 0) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.x > width) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.y > height) {
+        gameElements[index] = null;
+      }
+
+      if (this.speed < 0) {
+        gameElements[index] = null;
+      }
+    }
+  }]);
+
+  return Bullet;
+}(GameElement); //---------------------------------------------
+
+
+var Input =
+/*#__PURE__*/
+function () {
+  function Input() {
+    _classCallCheck(this, Input);
+
+    this.keyUpActive = false;
+    this.keyDownActive = false;
+    this.keyRightActive = false;
+    this.keyLeftActive = false;
+    document.addEventListener("keydown", this.keyDown.bind(this));
+    document.addEventListener("keyup", this.keyUp.bind(this));
+  }
+
+  _createClass(Input, [{
+    key: "keyDown",
+    value: function keyDown(e) {
+      switch (e.code) {
+        case "ArrowUp":
+          this.keyUpActive = true;
+          break;
+
+        case "ArrowDown":
+          this.keyDownActive = true;
+          break;
+
+        case "ArrowLeft":
+          this.keyLeftActive = true;
+          break;
+
+        case "ArrowRight":
+          this.keyRightActive = true;
+          break;
+      }
+    }
+  }, {
+    key: "keyUp",
+    value: function keyUp(e) {
+      switch (e.code) {
+        case "ArrowUp":
+          this.keyUpActive = false;
+          break;
+
+        case "ArrowDown":
+          this.keyDownActive = false;
+          break;
+
+        case "ArrowLeft":
+          this.keyLeftActive = false;
+          break;
+
+        case "ArrowRight":
+          this.keyRightActive = false;
+          break;
+      }
+    }
+  }]);
+
+  return Input;
+}(); //---------------------------------------------
+
+
+var Game =
+/*#__PURE__*/
+function () {
+  function Game(width, height, enemyCount) {
+    _classCallCheck(this, Game);
+
+    this.input = new Input();
+    this.gameElements = new Array();
+    this.player = new Player("./assets/img/player.png", new Point(width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
+    this.width = width;
+    this.height = height;
+
+    for (var a = 0; a < enemyCount; a++) {
+      this.gameElements.push(new Enemy("./assets/img/enemy.png", new Point(Math.random() * width, Math.random() * height), 0, 4));
+      this.gameElements[a].fireRate = 4;
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.id = "game";
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.zIndex = "1";
+    canvas.style.position = "absolute";
+    canvas.style.border = "1px solid";
+    document.getElementsByTagName("body")[0].appendChild(canvas);
+    window.requestAnimationFrame(this.gameloop.bind(this));
+  }
+
+  _createClass(Game, [{
+    key: "gameloop",
+    value: function gameloop() {
+      //update
+      this.player.update(this.input.keyUpActive, this.input.keyDownActive, this.input.keyLeftActive, this.input.keyRightActive, this.width, this.height);
+
+      for (var i in this.gameElements) {
+        this.gameElements[i].update(i, this.width, this.height, this.gameElements, this.player.point.x, this.player.point.y);
+      }
+
+      this.gameElements = this.gameElements.filter(Boolean); //draw
+
+      var canvas = document.getElementById("game");
+      var ctx = canvas.getContext("2d"); ////clear canvas
+
+      ctx.clearRect(0, 0, this.width, this.height); ////trail effect
+      //ctx.fillStyle = 'rgba(255, 255, 255, .05)';
+      //ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      this.player.draw(ctx);
+
+      for (var _i in this.gameElements) {
+        this.gameElements[_i].draw(ctx);
+      }
+
+      window.requestAnimationFrame(this.gameloop.bind(this));
+    }
+  }]);
+
+  return Game;
+}(); //---------------------------------------------
+// create game
+//---------------------------------------------
+
+
+var width = 500;
+var height = 500;
+var enemyCount = 5;
+var game = new Game(width, height, enemyCount);
+
+function level1() {
+  game.player.difference = 0.2;
+  game.player.steerDamping = 0.1;
+  game.player.speedMax = 3;
+}
+
+function level2() {
+  game.player.difference = 0.7;
+  game.player.steerDamping = 0.4;
+  game.player.speedMax = 6;
+}
+
+function level3() {
+  game.player.difference = 1.1;
+  game.player.steerDamping = 0.7;
+  game.player.speedMax = 9;
+}
 
 /***/ }),
 
