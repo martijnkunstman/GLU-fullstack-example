@@ -67,6 +67,9 @@ module.exports = {
       },
     ]
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
   plugins: [
     new CopyWebpackPlugin([
       { from: 'src/assets', to: 'assets' }

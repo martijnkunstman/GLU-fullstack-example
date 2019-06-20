@@ -9,11 +9,11 @@ export default class Game {
     private height: number;
     private gameElements: Array<any> = new Array();
     constructor(width: number, height: number, enemyCount: number) {
-        this.player = new Player("player.png", new Point(width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
+        this.player = new Player("./assets/img/player.png", new Point(width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
         this.width = width;
         this.height = height;
         for (let a = 0; a < enemyCount; a++) {
-            this.gameElements.push(new Enemy("enemy.png", new Point(Math.random() * width, Math.random() * height), 0, 4));
+            this.gameElements.push(new Enemy("./assets/img/enemy.png", new Point(Math.random() * width, Math.random() * height), 0, 4));
             this.gameElements[a].fireRate = 4;
         }
         var canvas = document.createElement('canvas');

@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "49cda06202e7c2fed618";
+/******/ 	var hotCurrentHash = "882e286fe4a7b83f1800";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3134,7 +3134,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./css/style.css */ "./src/css/style.css");
 /* harmony import */ var _css_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_css_style_css__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _ts_game_ts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ts/game.ts */ "./src/ts/game.ts");
-/* harmony import */ var _ts_game_ts__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_ts_game_ts__WEBPACK_IMPORTED_MODULE_2__);
 
 
  // Log message to console
@@ -3164,67 +3163,119 @@ var logMessage = function logMessage(msg) {
 
 /***/ }),
 
-/***/ "./src/ts/game.ts":
-/*!************************!*\
-  !*** ./src/ts/game.ts ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./src/ts/classes/Game.ts":
+/*!********************************!*\
+  !*** ./src/ts/classes/Game.ts ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Game; });
+/* harmony import */ var _GameElement_Player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GameElement/Player */ "./src/ts/classes/GameElement/Player.ts");
+/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Input */ "./src/ts/classes/Input.ts");
+/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Point */ "./src/ts/classes/Point.ts");
+/* harmony import */ var _GameElement_Enemy__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GameElement/Enemy */ "./src/ts/classes/GameElement/Enemy.ts");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-//---------------------------------------------
-// classes
-//---------------------------------------------
-var Point =
+
+
+
+
+
+var Game =
 /*#__PURE__*/
 function () {
-  function Point() {
-    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  function Game(width, height, enemyCount) {
+    _classCallCheck(this, Game);
 
-    _classCallCheck(this, Point);
+    this.input = new _Input__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    this.gameElements = new Array();
+    this.player = new _GameElement_Player__WEBPACK_IMPORTED_MODULE_0__["default"]("./assets/img/player.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
+    this.width = width;
+    this.height = height;
 
-    this.x = x;
-    this.y = y;
+    for (var a = 0; a < enemyCount; a++) {
+      this.gameElements.push(new _GameElement_Enemy__WEBPACK_IMPORTED_MODULE_3__["default"]("./assets/img/enemy.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](Math.random() * width, Math.random() * height), 0, 4));
+      this.gameElements[a].fireRate = 4;
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.id = "game";
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.zIndex = "1";
+    canvas.style.position = "absolute";
+    canvas.style.border = "1px solid";
+    document.getElementsByTagName("body")[0].appendChild(canvas);
+    window.requestAnimationFrame(this.gameloop.bind(this));
   }
 
-  _createClass(Point, [{
-    key: "distance",
-    value: function distance(point) {
-      return Math.sqrt(Math.pow(this.y - point.y, 2) + Math.pow(this.x - point.x, 2));
-    }
-  }, {
-    key: "angle",
-    value: function angle(point) {
-      return Math.atan2(this.y - point.y, this.x - point.x) * 180 / Math.PI;
+  _createClass(Game, [{
+    key: "gameloop",
+    value: function gameloop() {
+      //update
+      this.player.update(this.input.keyUpActive, this.input.keyDownActive, this.input.keyLeftActive, this.input.keyRightActive, this.width, this.height);
+
+      for (var i in this.gameElements) {
+        this.gameElements[i].update(i, this.width, this.height, this.gameElements, this.player.point.x, this.player.point.y);
+      }
+
+      this.gameElements = this.gameElements.filter(Boolean); //draw
+
+      var canvas = document.getElementById("game");
+      var ctx = canvas.getContext("2d"); ////clear canvas
+
+      ctx.clearRect(0, 0, this.width, this.height); ////trail effect
+      //ctx.fillStyle = 'rgba(255, 255, 255, .05)';
+      //ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      this.player.draw(ctx);
+
+      for (var _i in this.gameElements) {
+        this.gameElements[_i].draw(ctx);
+      }
+
+      window.requestAnimationFrame(this.gameloop.bind(this));
     }
   }]);
 
-  return Point;
+  return Game;
 }();
+
+
+
+/***/ }),
+
+/***/ "./src/ts/classes/GameElement.ts":
+/*!***************************************!*\
+  !*** ./src/ts/classes/GameElement.ts ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GameElement; });
+/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Point */ "./src/ts/classes/Point.ts");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
 
 var GameElement =
 /*#__PURE__*/
 function () {
   function GameElement(spriteSrc) {
-    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Point();
+    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _Point__WEBPACK_IMPORTED_MODULE_0__["default"]();
     var rotation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
     var speed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
 
@@ -3232,7 +3283,7 @@ function () {
 
     this.sprite = new Image();
     this.spriteLoaded = false;
-    this.point = new Point();
+    this.point = new _Point__WEBPACK_IMPORTED_MODULE_0__["default"]();
     this.width = 0;
     this.height = 0;
     this.sprite.addEventListener("load", this.load.bind(this));
@@ -3266,7 +3317,234 @@ function () {
   }]);
 
   return GameElement;
-}(); //---------------------------------------------
+}();
+
+
+
+/***/ }),
+
+/***/ "./src/ts/classes/GameElement/Bullet.ts":
+/*!**********************************************!*\
+  !*** ./src/ts/classes/GameElement/Bullet.ts ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Bullet; });
+/* harmony import */ var _GameElement__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../GameElement */ "./src/ts/classes/GameElement.ts");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Bullet =
+/*#__PURE__*/
+function (_GameElement) {
+  _inherits(Bullet, _GameElement);
+
+  function Bullet() {
+    _classCallCheck(this, Bullet);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Bullet).apply(this, arguments));
+  }
+
+  _createClass(Bullet, [{
+    key: "update",
+    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
+      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
+
+      if (this.point.x < 0) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.y < 0) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.x > width) {
+        gameElements[index] = null;
+      }
+
+      if (this.point.y > height) {
+        gameElements[index] = null;
+      }
+
+      if (this.speed < 0) {
+        gameElements[index] = null;
+      }
+    }
+  }]);
+
+  return Bullet;
+}(_GameElement__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+
+/***/ }),
+
+/***/ "./src/ts/classes/GameElement/Enemy.ts":
+/*!*********************************************!*\
+  !*** ./src/ts/classes/GameElement/Enemy.ts ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Enemy; });
+/* harmony import */ var _GameElement__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../GameElement */ "./src/ts/classes/GameElement.ts");
+/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Point */ "./src/ts/classes/Point.ts");
+/* harmony import */ var _Bullet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Bullet */ "./src/ts/classes/GameElement/Bullet.ts");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var Enemy =
+/*#__PURE__*/
+function (_GameElement) {
+  _inherits(Enemy, _GameElement);
+
+  function Enemy() {
+    var _getPrototypeOf2;
+
+    var _temp, _this;
+
+    _classCallCheck(this, Enemy);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Enemy)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.timer = 0, _this.fireRate = 100, _temp));
+  }
+
+  _createClass(Enemy, [{
+    key: "update",
+    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
+      //rotation
+      var newrotation = Math.atan2(this.point.y - yPlayer, this.point.x - xPlayer) * 180 / Math.PI;
+      var difference = this.rotation - newrotation;
+
+      if (difference > 180) {
+        difference = -360 + difference;
+      }
+
+      if (difference < -180) {
+        difference = 360 + difference;
+      }
+
+      this.rotation = this.rotation - difference / 128; //position
+
+      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
+      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
+
+      if (this.point.x > width) {
+        this.point.x = 0;
+      }
+
+      ;
+
+      if (this.point.y > height) {
+        this.point.y = 0;
+      }
+
+      ;
+
+      if (this.point.x < 0) {
+        this.point.x = width;
+      }
+
+      ;
+
+      if (this.point.y < 0) {
+        this.point.y = height;
+      }
+
+      ; //bullet
+
+      this.timer++;
+
+      if (this.timer > this.fireRate) {
+        this.timer = 0;
+        gameElements.push(new _Bullet__WEBPACK_IMPORTED_MODULE_2__["default"]("./assets/img/bullet.png", new _Point__WEBPACK_IMPORTED_MODULE_1__["default"](this.point.x, this.point.y), this.rotation, 8));
+      }
+    }
+  }]);
+
+  return Enemy;
+}(_GameElement__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+
+/***/ }),
+
+/***/ "./src/ts/classes/GameElement/Player.ts":
+/*!**********************************************!*\
+  !*** ./src/ts/classes/GameElement/Player.ts ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Player; });
+/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Point */ "./src/ts/classes/Point.ts");
+/* harmony import */ var _GameElement__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../GameElement */ "./src/ts/classes/GameElement.ts");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
 
 
 var Player =
@@ -3277,7 +3555,7 @@ function (_GameElement) {
   function Player(spriteSrc) {
     var _this;
 
-    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Point();
+    var point = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new _Point__WEBPACK_IMPORTED_MODULE_0__["default"]();
     var rotation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
     var speed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
     var speedMax = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
@@ -3468,127 +3746,27 @@ function (_GameElement) {
   }]);
 
   return Player;
-}(GameElement); //---------------------------------------------
+}(_GameElement__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 
-var Enemy =
-/*#__PURE__*/
-function (_GameElement2) {
-  _inherits(Enemy, _GameElement2);
 
-  function Enemy() {
-    var _getPrototypeOf2;
+/***/ }),
 
-    var _temp, _this2;
+/***/ "./src/ts/classes/Input.ts":
+/*!*********************************!*\
+  !*** ./src/ts/classes/Input.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-    _classCallCheck(this, Enemy);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Input; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-    return _possibleConstructorReturn(_this2, (_temp = _this2 = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Enemy)).call.apply(_getPrototypeOf2, [this].concat(args))), _this2.timer = 0, _this2.fireRate = 100, _temp));
-  }
-
-  _createClass(Enemy, [{
-    key: "update",
-    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
-      //rotation
-      var newrotation = Math.atan2(this.point.y - yPlayer, this.point.x - xPlayer) * 180 / Math.PI;
-      var difference = this.rotation - newrotation;
-
-      if (difference > 180) {
-        difference = -360 + difference;
-      }
-
-      if (difference < -180) {
-        difference = 360 + difference;
-      }
-
-      this.rotation = this.rotation - difference / 128; //position
-
-      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
-      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
-
-      if (this.point.x > width) {
-        this.point.x = 0;
-      }
-
-      ;
-
-      if (this.point.y > height) {
-        this.point.y = 0;
-      }
-
-      ;
-
-      if (this.point.x < 0) {
-        this.point.x = width;
-      }
-
-      ;
-
-      if (this.point.y < 0) {
-        this.point.y = height;
-      }
-
-      ; //bullet
-
-      this.timer++;
-
-      if (this.timer > this.fireRate) {
-        this.timer = 0;
-        gameElements.push(new Bullet("./assets/img/bullet.png", new Point(this.point.x, this.point.y), this.rotation, 8));
-      }
-    }
-  }]);
-
-  return Enemy;
-}(GameElement); //---------------------------------------------
-
-
-var Bullet =
-/*#__PURE__*/
-function (_GameElement3) {
-  _inherits(Bullet, _GameElement3);
-
-  function Bullet() {
-    _classCallCheck(this, Bullet);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Bullet).apply(this, arguments));
-  }
-
-  _createClass(Bullet, [{
-    key: "update",
-    value: function update(index, width, height, gameElements, xPlayer, yPlayer) {
-      this.point.x -= this.speed * Math.cos(this.rotation * Math.PI / 180);
-      this.point.y -= this.speed * Math.sin(this.rotation * Math.PI / 180);
-
-      if (this.point.x < 0) {
-        gameElements[index] = null;
-      }
-
-      if (this.point.y < 0) {
-        gameElements[index] = null;
-      }
-
-      if (this.point.x > width) {
-        gameElements[index] = null;
-      }
-
-      if (this.point.y > height) {
-        gameElements[index] = null;
-      }
-
-      if (this.speed < 0) {
-        gameElements[index] = null;
-      }
-    }
-  }]);
-
-  return Bullet;
-}(GameElement); //---------------------------------------------
-
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Input =
 /*#__PURE__*/
@@ -3649,76 +3827,78 @@ function () {
   }]);
 
   return Input;
-}(); //---------------------------------------------
+}();
 
 
-var Game =
+
+/***/ }),
+
+/***/ "./src/ts/classes/Point.ts":
+/*!*********************************!*\
+  !*** ./src/ts/classes/Point.ts ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Point; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Point =
 /*#__PURE__*/
 function () {
-  function Game(width, height, enemyCount) {
-    _classCallCheck(this, Game);
+  function Point() {
+    var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-    this.input = new Input();
-    this.gameElements = new Array();
-    this.player = new Player("./assets/img/player.png", new Point(width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
-    this.width = width;
-    this.height = height;
+    _classCallCheck(this, Point);
 
-    for (var a = 0; a < enemyCount; a++) {
-      this.gameElements.push(new Enemy("./assets/img/enemy.png", new Point(Math.random() * width, Math.random() * height), 0, 4));
-      this.gameElements[a].fireRate = 4;
-    }
-
-    var canvas = document.createElement('canvas');
-    canvas.id = "game";
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.zIndex = "1";
-    canvas.style.position = "absolute";
-    canvas.style.border = "1px solid";
-    document.getElementsByTagName("body")[0].appendChild(canvas);
-    window.requestAnimationFrame(this.gameloop.bind(this));
+    this.x = x;
+    this.y = y;
   }
 
-  _createClass(Game, [{
-    key: "gameloop",
-    value: function gameloop() {
-      //update
-      this.player.update(this.input.keyUpActive, this.input.keyDownActive, this.input.keyLeftActive, this.input.keyRightActive, this.width, this.height);
-
-      for (var i in this.gameElements) {
-        this.gameElements[i].update(i, this.width, this.height, this.gameElements, this.player.point.x, this.player.point.y);
-      }
-
-      this.gameElements = this.gameElements.filter(Boolean); //draw
-
-      var canvas = document.getElementById("game");
-      var ctx = canvas.getContext("2d"); ////clear canvas
-
-      ctx.clearRect(0, 0, this.width, this.height); ////trail effect
-      //ctx.fillStyle = 'rgba(255, 255, 255, .05)';
-      //ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      this.player.draw(ctx);
-
-      for (var _i in this.gameElements) {
-        this.gameElements[_i].draw(ctx);
-      }
-
-      window.requestAnimationFrame(this.gameloop.bind(this));
+  _createClass(Point, [{
+    key: "distance",
+    value: function distance(point) {
+      return Math.sqrt(Math.pow(this.y - point.y, 2) + Math.pow(this.x - point.x, 2));
+    }
+  }, {
+    key: "angle",
+    value: function angle(point) {
+      return Math.atan2(this.y - point.y, this.x - point.x) * 180 / Math.PI;
     }
   }]);
 
-  return Game;
-}(); //---------------------------------------------
-// create game
-//---------------------------------------------
+  return Point;
+}();
 
+
+
+/***/ }),
+
+/***/ "./src/ts/game.ts":
+/*!************************!*\
+  !*** ./src/ts/game.ts ***!
+  \************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Game */ "./src/ts/classes/Game.ts");
+//---------------------------------------------
+// classes
+//---------------------------------------------
 
 var width = 500;
 var height = 500;
 var enemyCount = 5;
-var game = new Game(width, height, enemyCount);
+var game = new _classes_Game__WEBPACK_IMPORTED_MODULE_0__["default"](width, height, enemyCount);
 
 function level1() {
   game.player.difference = 0.2;
