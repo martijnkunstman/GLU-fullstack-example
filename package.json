@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/martijnkunstman/GLU-fullstack-example#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "@types/jquery": "^3.3.29",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

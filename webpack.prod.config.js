@@ -1,4 +1,5 @@
 const path = require("path")
+const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
@@ -71,6 +72,10 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    }),
     new CopyWebpackPlugin([
       { from: 'src/assets', to: 'assets' }
     ]),
