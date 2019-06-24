@@ -9,7 +9,7 @@ export default class GameElement {
     public height: number = 0;
     constructor(spriteSrc: string, point: Point = new Point(), rotation: number = 0, speed: number = 0) {
         this.sprite.addEventListener("load", this.load.bind(this));
-        this.sprite.src = spriteSrc;
+        this.sprite.src = require("../../img/"+spriteSrc);
         this.point.x = point.x;
         this.point.y = point.y;
         this.rotation = rotation;

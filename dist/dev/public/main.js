@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "3b26501507ecf4c303e4";
+/******/ 	var hotCurrentHash = "c30ad36977ab310192cc";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -13720,6 +13720,42 @@ if(true) {
 
 /***/ }),
 
+/***/ "./src/img sync recursive ^\\.\\/.*$":
+/*!*******************************!*\
+  !*** ./src/img sync ^\.\/.*$ ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./bg.jpg": "./src/img/bg.jpg",
+	"./bullet.png": "./src/img/bullet.png",
+	"./enemy.png": "./src/img/enemy.png",
+	"./player.png": "./src/img/player.png"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/img sync recursive ^\\.\\/.*$";
+
+/***/ }),
+
 /***/ "./src/img/bg.jpg":
 /*!************************!*\
   !*** ./src/img/bg.jpg ***!
@@ -13728,6 +13764,39 @@ if(true) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "50dcadce9c3c12fb65da0779494f80c2.jpg";
+
+/***/ }),
+
+/***/ "./src/img/bullet.png":
+/*!****************************!*\
+  !*** ./src/img/bullet.png ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "672dff8af6f118033f20777e618cd059.png";
+
+/***/ }),
+
+/***/ "./src/img/enemy.png":
+/*!***************************!*\
+  !*** ./src/img/enemy.png ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "553ce9ac72c9e1715fcdbfbf67984721.png";
+
+/***/ }),
+
+/***/ "./src/img/player.png":
+/*!****************************!*\
+  !*** ./src/img/player.png ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "6f09f2585bcd7994725b4ef25c9721f7.png";
 
 /***/ }),
 
@@ -13809,12 +13878,12 @@ function () {
 
     this.input = new _Input__WEBPACK_IMPORTED_MODULE_1__["default"]();
     this.gameElements = new Array();
-    this.player = new _GameElement_Player__WEBPACK_IMPORTED_MODULE_0__["default"]("./assets/img/player.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
+    this.player = new _GameElement_Player__WEBPACK_IMPORTED_MODULE_0__["default"]("player.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](width / 2, height / 2), 0, 0, 5, 0.2, 0, 3, 0.1);
     this.width = width;
     this.height = height;
 
     for (var a = 0; a < enemyCount; a++) {
-      this.gameElements.push(new _GameElement_Enemy__WEBPACK_IMPORTED_MODULE_3__["default"]("./assets/img/enemy.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](Math.random() * width, Math.random() * height), 0, 4));
+      this.gameElements.push(new _GameElement_Enemy__WEBPACK_IMPORTED_MODULE_3__["default"]("enemy.png", new _Point__WEBPACK_IMPORTED_MODULE_2__["default"](Math.random() * width, Math.random() * height), 0, 4));
       this.gameElements[a].fireRate = 4;
     }
 
@@ -13900,7 +13969,7 @@ function () {
     this.width = 0;
     this.height = 0;
     this.sprite.addEventListener("load", this.load.bind(this));
-    this.sprite.src = spriteSrc;
+    this.sprite.src = __webpack_require__("./src/img sync recursive ^\\.\\/.*$")("./" + spriteSrc);
     this.point.x = point.x;
     this.point.y = point.y;
     this.rotation = rotation;
@@ -14115,7 +14184,7 @@ function (_GameElement) {
 
       if (this.timer > this.fireRate) {
         this.timer = 0;
-        gameElements.push(new _Bullet__WEBPACK_IMPORTED_MODULE_2__["default"]("./assets/img/bullet.png", new _Point__WEBPACK_IMPORTED_MODULE_1__["default"](this.point.x, this.point.y), this.rotation, 8));
+        gameElements.push(new _Bullet__WEBPACK_IMPORTED_MODULE_2__["default"]("bullet.png", new _Point__WEBPACK_IMPORTED_MODULE_1__["default"](this.point.x, this.point.y), this.rotation, 8));
       }
     }
   }]);

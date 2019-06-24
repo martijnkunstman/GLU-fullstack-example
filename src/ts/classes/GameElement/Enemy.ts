@@ -1,3 +1,5 @@
+
+
 import GameElement from "../GameElement"
 import Point from "../Point"
 import Bullet from "./Bullet"
@@ -31,7 +33,7 @@ export default class Enemy extends GameElement {
         this.timer++;
         if (this.timer > this.fireRate) {
             this.timer = 0;
-            gameElements.push(new Bullet("./assets/img/bullet.png", new Point(this.point.x, this.point.y), this.rotation, 8));
+            gameElements.push(new Bullet("bullet.png", new Point(this.point.x, this.point.y), this.rotation, 8));
         }
     }
 }

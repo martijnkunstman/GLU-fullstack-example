@@ -57,7 +57,7 @@ module.exports = {
       },
       {
         // Loads images into CSS and Javascript files
-        test: /\.jpg$/,
+        test: /\.(jpg|png)$/,
         use: [{loader: "url-loader"}]
       },
       {
@@ -73,8 +73,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
+      $: "jquery"
     }),
     new CopyWebpackPlugin([
       { from: 'src/assets', to: 'assets' }
