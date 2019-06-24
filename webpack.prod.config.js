@@ -56,6 +56,11 @@ module.exports = {
         ]
       },
       {
+        test: /\.(jpg|png)$/,
+        loader: 'image-webpack-loader',
+        enforce: 'pre'
+      },
+      {
         // Loads images into CSS and Javascript files
         test: /\.(jpg|png)$/,
         use: [{loader: "url-loader"}]

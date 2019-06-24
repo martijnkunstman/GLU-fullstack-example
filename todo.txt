@@ -1,0 +1,4 @@
+todo:
+
+controle Jquery manier van insluiten
+controle dubbel insluiten van afbeeldingen in prod (jpg afbeelding ook in js, maar is niet nodig)
