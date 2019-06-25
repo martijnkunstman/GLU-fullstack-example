@@ -67,8 +67,8 @@ module.exports = {
       },
       {
         // Loads CSS into a file when you import it via Javascript
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader',"sass-loader"]
       },
     ]
   },
