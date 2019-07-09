@@ -3,6 +3,7 @@ export default class Input {
     public keyDownActive = false;
     public keyRightActive = false;
     public keyLeftActive = false;
+    public keySpaceActive = false;
     constructor() {
         document.addEventListener("keydown", this.keyDown.bind(this));
         document.addEventListener("keyup", this.keyUp.bind(this));
@@ -13,6 +14,7 @@ export default class Input {
             case "ArrowDown": this.keyDownActive = true; break;
             case "ArrowLeft": this.keyLeftActive = true; break;
             case "ArrowRight": this.keyRightActive = true; break;
+            case "Space": this.keySpaceActive = true; break;
         }
     };
     private keyUp(e: KeyboardEvent): void {
@@ -21,6 +23,7 @@ export default class Input {
             case "ArrowDown": this.keyDownActive = false; break;
             case "ArrowLeft": this.keyLeftActive = false; break;
             case "ArrowRight": this.keyRightActive = false; break;
+            case "Space": this.keySpaceActive = false; break;
         }
     };
 }

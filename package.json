@@ -24,6 +24,7 @@
   "homepage": "https://github.com/martijnkunstman/GLU-fullstack-example#readme",
   "dependencies": {
     "@types/jquery": "^3.3.29",
+    "dat.gui": "^0.7.6",
     "express": "^4.17.1"
   },
   "devDependencies": {
