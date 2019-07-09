@@ -2,9 +2,11 @@ import Player from "./GameElement/Player"
 import Input from "./Input"
 import Point from "./Point"
 import Enemy from "./GameElement/Enemy"
+import Terrain from "../levels/level1/map/Terrain";
 
 export default class Game {
     public player: Player;
+    public terrain: Terrain;
 
     private input: Input = new Input();
     private width: number;
@@ -13,6 +15,7 @@ export default class Game {
     constructor(width: number, height: number, enemyCount: number) {
 
         this.player = new Player("player.png", new Point(width / 2, height / 2), 0, 0, 5);
+        this.terrain = new Terrain();
         this.width = width;
         this.height = height;
         for (let a = 0; a < enemyCount; a++) {
@@ -43,7 +46,7 @@ export default class Game {
         //pre update
         let canvas: any = document.getElementById("game");
         let ctx = canvas.getContext("2d");
-        let trailEffect = true;
+        let trailEffect = false;
 
         if (!trailEffect) {
             ctx.clearRect(0, 0, this.width, this.height);
@@ -53,22 +56,24 @@ export default class Game {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
         
-        //update
+
+        this.terrain.draw(ctx);
         this.player.update(this.input, ctx);
+        this.terrain.update(this.player);
+        
         for (let i in this.gameElements) {
             this.gameElements[i].update(i, this.width, this.height, this.gameElements, this.player);
         }
         this.gameElements = this.gameElements.filter(Boolean);
         
-        //draw
-        
+       
         this.player.draw(ctx);
+        
         for (let i in this.gameElements) {
             this.gameElements[i].draw(ctx);
         }
 
-        //to do: render engine
-        
+        //to do: render engine        
        
          window.requestAnimationFrame(this.gameloop.bind(this));
     }

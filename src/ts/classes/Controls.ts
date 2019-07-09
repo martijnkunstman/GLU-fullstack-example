@@ -1,4 +1,5 @@
 import Vector from "./Vector"
+import Input from "./Input"
 export default class Controls {
     public vector: Vector;
 
@@ -8,6 +9,10 @@ export default class Controls {
     public rotation: number;
     public laserPower: number;
 
+    private lastDraw : number;
+    private fps: number;
+
+
     constructor(damping: number = 0.05, friction: number = 0.05, force: number = 0.15) {
         this.damping = damping;
         this.friction = friction;
@@ -15,15 +20,22 @@ export default class Controls {
         this.vector = new Vector(0, 0);
         this.rotation = 0;
         this.laserPower = 100;
+        this.lastDraw = Date.now(); 
+        this.fps = 0;
     }
 
-    public update(up: boolean, down: boolean, left: boolean, right: boolean, space: boolean): void {
+    public update(input: Input): void {
+
+
+        input.keyUpActive, input.keyDownActive, input.keyLeftActive, input.keyRightActive, input.keySpaceActive
+
         this.vector.damping(this.damping);
         this.vector.friction(this.friction);
-        if (up) { this.vector.plus(new Vector(0, -this.force)) }
-        if (down) { this.vector.plus(new Vector(0, this.force)) }
-        if (left) { this.vector.plus(new Vector(-this.force, 0)) }
-        if (right) { this.vector.plus(new Vector(this.force, 0)) }
+        let keyActive = false;
+        if (input.keyUpActive) { this.vector.plus(new Vector(0, -this.force)); keyActive = true; }
+        if (input.keyDownActive) { this.vector.plus(new Vector(0, this.force)); keyActive = true; }
+        if (input.keyLeftActive) { this.vector.plus(new Vector(-this.force, 0)); keyActive = true; }
+        if (input.keyRightActive) { this.vector.plus(new Vector(this.force, 0)); keyActive = true; }
         this.vector.correction(1, 0.005);
 
         let temp = 0;
@@ -36,8 +48,8 @@ export default class Controls {
         //to do: make speed of recovery and drainage of laserPower adjustable and dependant on vector force
         //to do: adjust vector force based on usage of space
         //
-        if (space) {
-            if (up || down || left || right) {
+        if (input.keySpaceActive) {
+            if (keyActive) {
                 this.laserPower -= 2;
             }
             else {
@@ -48,7 +60,7 @@ export default class Controls {
             }
         }
         else {
-            if (up || down || left || right) {
+            if (keyActive) {
                 this.laserPower += 0.5;
             }
             else {
@@ -65,14 +77,15 @@ export default class Controls {
         return dif;
     }
 
-    public draw(up: boolean, down: boolean, left: boolean, right: boolean, space: boolean): void {
+    public draw(input:Input): void {
         let canvas: any = document.getElementById("game2");
         let ctx = canvas.getContext("2d");
         ctx.fillStyle = 'rgba(255, 255, 255, .5)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.save();
+        
+        //ctx.save();
 
-        if (space) {
+        if (input.keySpaceActive) {
             ctx.strokeStyle = "#FF0000";
         }
         else {
@@ -95,28 +108,28 @@ export default class Controls {
         ctx.strokeStyle = "#FF0000";
         ctx.lineWidth = 3;
 
-        if (up) {
+        if (input.keyUpActive) {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.lineTo(100, 0);
             ctx.stroke();
             ctx.closePath();
         }
-        if (down) {
+        if (input.keyDownActive) {
             ctx.beginPath();
             ctx.moveTo(0, 100);
             ctx.lineTo(100, 100);
             ctx.stroke();
             ctx.closePath();
         }
-        if (left) {
+        if (input.keyLeftActive) {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.lineTo(0, 100);
             ctx.stroke();
             ctx.closePath();
         }
-        if (right) {
+        if (input.keyRightActive) {
             ctx.beginPath();
             ctx.moveTo(100, 0);
             ctx.lineTo(100, 100);
@@ -149,14 +162,20 @@ export default class Controls {
         ctx.stroke();
         ctx.closePath();
 
+        let elapsed = Date.now() - this.lastDraw;
+        this.lastDraw = Date.now()
+        let newFps = 1000/elapsed;
+        this.fps = this.fps - (this.fps - newFps)/16;
+
         ctx.font = "12px Arial";
+        ctx.fillStyle = "#000000";
         ctx.textAlign = "end";
         ctx.fillText("x:" + this.vector.x.toFixed(3), 95, 15);
         ctx.fillText("y:" + this.vector.y.toFixed(3), 95, 25);
         ctx.fillText("r:" + this.rotation.toFixed(3), 95, 35);
-        ctx.fillText("l:" + this.laserPower.toFixed(3), 95, 35);
+        ctx.fillText("l:" + this.laserPower.toFixed(3), 95, 45);
+        ctx.fillText("f:" + Math.round(this.fps), 95, 55);
 
-
-        ctx.restore();
+        //ctx.restore();
     }
 }
