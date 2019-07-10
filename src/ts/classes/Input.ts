@@ -4,6 +4,9 @@ export default class Input {
     public keyRightActive = false;
     public keyLeftActive = false;
     public keySpaceActive = false;
+    public keyPlusActive = false;
+    public keyMinusActive = false;
+
     constructor() {
         document.addEventListener("keydown", this.keyDown.bind(this));
         document.addEventListener("keyup", this.keyUp.bind(this));

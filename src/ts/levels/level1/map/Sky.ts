@@ -1,5 +1,5 @@
 import Player from "../../../classes/GameElement/Player"
-export default class Terrain {
+export default class Sky {
     public map: Array<Array<number>>;
     public scale: number;
     public x: number;
@@ -7,7 +7,7 @@ export default class Terrain {
     public width: number;
     public height: number;
 
-    constructor(scale: number = 0.3, x: number = 0, y: number = 0, width: number = 500, height: number = 500) {
+    constructor(scale: number = 0.35, x: number = 0, y: number = 0, width: number = 500, height: number = 500) {
         this.scale = scale;
         this.x = x;
         this.y = y;
@@ -81,17 +81,17 @@ export default class Terrain {
                 let y2 = this.height * this.scale;
                 //
                 ctx.lineWidth = 1;
-                ctx.strokeStyle = "#000000";
+                ctx.strokeStyle = "#0000ff";
                 ctx.beginPath();
                 ctx.rect(x1, y1, x2, y2);
                 ctx.fillStyle = this.colorByNumber(this.map[a][b]);
                 ctx.stroke();
-                ctx.fill();
+                //ctx.fill();
                 ctx.closePath(); 
-                ctx.fillStyle = "#000000";
+                ctx.fillStyle = "#0000ff";
                 ctx.font = "12px Arial";
                 ctx.textAlign = "start";
-                ctx.fillText(a+"-"+b, x1+10, y1+40);             
+                ctx.fillText(a+"-"+b, x1+10, y1+20);
             }
         }
 

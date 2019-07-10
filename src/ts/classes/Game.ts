@@ -3,10 +3,12 @@ import Input from "./Input"
 import Point from "./Point"
 import Enemy from "./GameElement/Enemy"
 import Terrain from "../levels/level1/map/Terrain";
+import Sky from "../levels/level1/map/Sky";
 
 export default class Game {
     public player: Player;
     public terrain: Terrain;
+    public sky: Sky;
 
     private input: Input = new Input();
     private width: number;
@@ -16,6 +18,7 @@ export default class Game {
 
         this.player = new Player("player.png", new Point(width / 2, height / 2), 0, 0, 5);
         this.terrain = new Terrain();
+        this.sky = new Sky();
         this.width = width;
         this.height = height;
         for (let a = 0; a < enemyCount; a++) {
@@ -38,6 +41,7 @@ export default class Game {
         canvas2.style.zIndex = "1";
         canvas2.style.position = "absolute";
         canvas2.style.border = "1px solid";
+        canvas2.style.left = (this.width+10)+"px";
         document.getElementsByTagName("body")[0].appendChild(canvas2);
 
         window.requestAnimationFrame(this.gameloop.bind(this));
@@ -55,11 +59,14 @@ export default class Game {
             ctx.fillStyle = 'rgba(255, 255, 255, .25)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
+
         
 
         this.terrain.draw(ctx);
+        this.sky.draw(ctx);
         this.player.update(this.input, ctx);
         this.terrain.update(this.player);
+        this.sky.update(this.player);
         
         for (let i in this.gameElements) {
             this.gameElements[i].update(i, this.width, this.height, this.gameElements, this.player);
