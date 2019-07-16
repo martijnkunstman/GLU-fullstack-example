@@ -2,13 +2,12 @@ import Player from "./GameElement/Player"
 import Input from "./Input"
 import Point from "./Point"
 import Enemy from "./GameElement/Enemy"
-import Terrain from "../levels/level1/map/Terrain";
-import Sky from "../levels/level1/map/Sky";
+import Map from "../levels/level1/map/Map";
 
 export default class Game {
     public player: Player;
-    public terrain: Terrain;
-    public sky: Sky;
+    public terrain: Map;
+    public sky: Map;
 
     private input: Input = new Input();
     private width: number;
@@ -17,8 +16,8 @@ export default class Game {
     constructor(width: number, height: number, enemyCount: number) {
 
         this.player = new Player("player.png", new Point(width / 2, height / 2), 0, 0, 5);
-        this.terrain = new Terrain();
-        this.sky = new Sky();
+        this.terrain = new Map(0.2, width, height, 2, "#999999");
+        this.sky = new Map(0.25, width, height, 4, "#cccccc");
         this.width = width;
         this.height = height;
         for (let a = 0; a < enemyCount; a++) {
